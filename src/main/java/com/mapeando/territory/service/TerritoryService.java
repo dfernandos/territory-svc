@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -14,6 +15,10 @@ public class TerritoryService {
     @Autowired
     TerritoryRepository territoryRepository;
     public Territory createStudent(Territory territory) {
+        byte[] imagemBytes = territory.getMainImage().getBytes();
+        String imagemBase64 = Base64.getEncoder().encodeToString(imagemBytes);
+        territory.setMainImage(imagemBase64);
+
         return territoryRepository.save(territory);
     }
 

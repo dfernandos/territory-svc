@@ -22,16 +22,25 @@ public class Territory {
     @Field(name = "name")
     private String name;
 
-    @Field(name = "content1")
-    private String content1;
+    @Field(name = "briefDescription")
+    private String briefDescription;
 
-    @Field(name = "content2")
-    private String content2;
+    @Field(name = "history")
+    private String history;
 
-    @Field(name = "content3")
-    private String content3;
+    @Field(name = "cartografia")
+    private String cartografia;
 
-    @Field(name = "content4")
-    private String content4;
+    @Field(name = "religion")
+    private String religion;
+
+    @Field(name = "extra_content")
+    private String extra_content;
+
+    @Field(name = "mainImage")
+    private String mainImage;
+
+    @Field(name = "map")
+    private String map;
 
 }
