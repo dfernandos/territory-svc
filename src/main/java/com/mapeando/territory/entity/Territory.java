@@ -38,7 +38,7 @@ public class Territory {
     private String extra_content;
 
     @Field(name = "mainImage")
-    private String mainImage;
+    private byte[] mainImage;
 
     @Field(name = "map")
     private String map;

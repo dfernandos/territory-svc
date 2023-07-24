@@ -14,11 +14,7 @@ public class TerritoryService {
 
     @Autowired
     TerritoryRepository territoryRepository;
-    public Territory createStudent(Territory territory) {
-        byte[] imagemBytes = territory.getMainImage().getBytes();
-        String imagemBase64 = Base64.getEncoder().encodeToString(imagemBytes);
-        territory.setMainImage(imagemBase64);
-
+    public Territory createTerritory(Territory territory) {
         return territoryRepository.save(territory);
     }
 
