@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @EnableMongoRepositories("com.mapeando.territory.repository")
 @ComponentScan("com.mapeando.territory.*")
+@ComponentScan(basePackages = { "com.mapeando.territory"})
 public class TerritoryApplication {
 
     public static void main(String[] args) {
