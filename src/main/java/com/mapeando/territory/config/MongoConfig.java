@@ -1,27 +1,24 @@
 package com.mapeando.territory.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 
 @Configuration
-public class MongoConfig extends AbstractMongoClientConfiguration {
+public class MongoConfig {
 
-    @Override
-    protected String getDatabaseName() {
-        return "territories"; // Replace with your MongoDB database name
-    }
+    private final DatabaseConfigProperties properties;
 
-    @Override
-    public MongoClient mongoClient() {
-        return MongoClients.create(); // Use default MongoClient
+    @Autowired
+    public MongoConfig(DatabaseConfigProperties properties) {
+        this.properties = properties;
     }
 
     @Bean
     public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(mongoClient(), getDatabaseName());
+        return new MongoTemplate(new SimpleMongoClientDatabaseFactory(properties.getUri()));
     }
 }
+
