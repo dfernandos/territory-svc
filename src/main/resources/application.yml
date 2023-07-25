@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://mongo:sq1wvB6xFJETGIP7teyG@containers-us-west-80.railway.app/territories?retryWrites=true&w=majority
