@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TerritoryService {
@@ -17,8 +18,8 @@ public class TerritoryService {
         return territoryRepository.save(territory);
     }
 
-    public Territory getTerritoryById(String id) {
-        return territoryRepository.findById(id).get();
+    public Optional<Territory> getTerritoryById(String id) {
+        return territoryRepository.findById(id);
     }
 
     public List<Territory> getAllTerrytories() {
