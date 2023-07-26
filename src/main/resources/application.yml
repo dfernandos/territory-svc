@@ -2,4 +2,4 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://mongo:2WDG8TqJXrseQJpapSJh@containers-us-west-80.railway.app:7215/territotories?authSource=admin
+      uri: mongodb://${{MongoDB.MONGOHOST}}:${{MongoDB.MONGOPASSWORD}}@${{MongoDB.MONGOHOST}}:${{MongoDB.MONGOPORT}}/territotories?authSource=admin
