@@ -1,4 +1,4 @@
 spring:
   data:
     mongodb:
-      uri: ${MONGO_URL}
+      uri: ${MONGO_URL}/territotories/authSource=admin
