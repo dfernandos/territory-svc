@@ -1,4 +1,8 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://mongo:2WDG8TqJXrseQJpapSJh@containers-us-west-80.railway.app:7215/territotories?authSource=admin
+      host: ${MongoDB.MONGOHOST}
+      port: ${MongoDB.MONGOPORT}
+      username: ${MongoDB.MONGOUSER}
+      password: ${MongoDB.MONGOPASSWORD}
+      uri: ${MongoDB.MONGO_URL}
