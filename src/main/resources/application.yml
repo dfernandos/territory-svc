@@ -1,9 +1,4 @@
 spring:
   data:
     mongodb:
-      host: ${MongoDB.MONGOHOST}
-      port: ${MongoDB.MONGOPORT}
-      username: ${MongoDB.MONGOUSER}
-      password: ${MongoDB.MONGOPASSWORD}
-      uri: ${MongoDB.MONGO_URL}
-
+      uri: ${MONGO_URL}
