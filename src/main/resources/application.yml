@@ -6,3 +6,4 @@ spring:
       username: ${MongoDB.MONGOUSER}
       password: ${MongoDB.MONGOPASSWORD}
       uri: ${MongoDB.MONGO_URL}
+
