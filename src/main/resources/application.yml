@@ -1,0 +1,5 @@
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mongo:2WDG8TqJXrseQJpapSJh@containers-us-west-80.railway.app:7215/territotories?authSource=admin
