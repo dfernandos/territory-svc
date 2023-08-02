@@ -21,4 +21,3 @@ public class MongoConfig {
         return new MongoTemplate(new SimpleMongoClientDatabaseFactory(properties.getUri()));
     }
 }
-

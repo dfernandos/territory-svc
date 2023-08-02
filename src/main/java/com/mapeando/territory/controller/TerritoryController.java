@@ -53,18 +53,26 @@ public class TerritoryController {
     public ResponseEntity<?> updateTerritory(
             @PathVariable String territoryId,
             @ModelAttribute Territory territory,
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam(value = "file", required = false) MultipartFile file) {
 
         // Primeiro, busque o território existente no banco de dados com base no ID fornecido
         Optional<Territory> optionalTerritory = territoryService.getTerritoryById(territoryId);
 
         if (optionalTerritory.isPresent()) {
+
             Territory existingTerritory = optionalTerritory.get();
 
             try {
                 // Trate a imagem (converta para Base64 ou salve em disco, se preferir)
-                byte[] imageData = file.getBytes();
-                territory.setMainImage(imageData);
+                if (file != null) {
+                    // Trate a imagem (converta para Base64 ou salve em disco, se preferir)
+                    byte[] imageData = file.getBytes();
+                    territory.setMainImage(imageData);
+                    existingTerritory.setMainImage(territory.getMainImage());
+                } else {
+                    // Caso o file seja null, não altere o valor do mainImage no existingTerritory
+                    existingTerritory.setMainImage(existingTerritory.getMainImage());
+                }
 
                 // Atualize apenas as propriedades do território que foram modificadas
                 existingTerritory.setName(territory.getName());
@@ -73,7 +81,6 @@ public class TerritoryController {
                 existingTerritory.setCartografia(territory.getCartografia());
                 existingTerritory.setReligion(territory.getReligion());
                 existingTerritory.setExtra_content(territory.getExtra_content());
-                existingTerritory.setMainImage(territory.getMainImage());
                 existingTerritory.setMap(territory.getMap());
 
                 // Salve o território atualizado
