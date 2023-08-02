@@ -55,7 +55,6 @@ public class TerritoryController {
             @ModelAttribute Territory territory,
             @RequestParam(value = "file", required = false) MultipartFile file) {
 
-        // Primeiro, busque o território existente no banco de dados com base no ID fornecido
         Optional<Territory> optionalTerritory = territoryService.getTerritoryById(territoryId);
 
         if (optionalTerritory.isPresent()) {
@@ -63,18 +62,14 @@ public class TerritoryController {
             Territory existingTerritory = optionalTerritory.get();
 
             try {
-                // Trate a imagem (converta para Base64 ou salve em disco, se preferir)
                 if (file != null) {
-                    // Trate a imagem (converta para Base64 ou salve em disco, se preferir)
                     byte[] imageData = file.getBytes();
                     territory.setMainImage(imageData);
                     existingTerritory.setMainImage(territory.getMainImage());
                 } else {
-                    // Caso o file seja null, não altere o valor do mainImage no existingTerritory
                     existingTerritory.setMainImage(existingTerritory.getMainImage());
                 }
 
-                // Atualize apenas as propriedades do território que foram modificadas
                 existingTerritory.setName(territory.getName());
                 existingTerritory.setBriefDescription(territory.getBriefDescription());
                 existingTerritory.setHistory(territory.getHistory());
@@ -83,7 +78,6 @@ public class TerritoryController {
                 existingTerritory.setExtra_content(territory.getExtra_content());
                 existingTerritory.setMap(territory.getMap());
 
-                // Salve o território atualizado
                 Territory savedTerritory = territoryService.updateTerritory(existingTerritory);
                 return new ResponseEntity<>(savedTerritory, HttpStatus.CREATED);
             } catch (IOException e) {
@@ -92,7 +86,6 @@ public class TerritoryController {
                 return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else {
-            // Caso o território com o ID fornecido não seja encontrado, retorne uma resposta de erro
             String errorMessage = "Território não encontrado com o ID: " + territoryId;
             ErrorResponse errorResponse = new ErrorResponse(errorMessage, HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
