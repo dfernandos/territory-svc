@@ -45,7 +45,7 @@ public class TerritoryController {
     }
 
     @GetMapping("/territory/all")
-    public List<Territory> getTerritoryById(){
+    public List<Territory> getAllTerritories(){
         return territoryService.getAllTerrytories();
     }
 
@@ -76,7 +76,9 @@ public class TerritoryController {
                 existingTerritory.setCartografia(territory.getCartografia());
                 existingTerritory.setReligion(territory.getReligion());
                 existingTerritory.setExtra_content(territory.getExtra_content());
-                existingTerritory.setMap(territory.getMap());
+                existingTerritory.setReference(territory.getReference());
+                existingTerritory.setLatitude(territory.getLatitude());
+                existingTerritory.setLongitude(territory.getLongitude());
 
                 Territory savedTerritory = territoryService.updateTerritory(existingTerritory);
                 return new ResponseEntity<>(savedTerritory, HttpStatus.CREATED);
@@ -103,19 +105,4 @@ public class TerritoryController {
         return territoryService.deleteTerritory(id);
     }
 
-//    @GetMapping("/territory/all")
-//    public ResponseEntity<?> getAllTerritories() {
-//
-//        try {
-//            List<Territory> territories = territoryService.getAllTerrytories();
-//            TerritoryResponse territoryResponse = new TerritoryResponse(territories);
-//
-//            return ResponseEntity.ok(territoryResponse);
-//        } catch (Exception e) {
-//            String errorMessage = "Erro ao retornar territórios " + e.getMessage();
-//            ErrorResponse errorResponse = new ErrorResponse(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
-//            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//    }
 }

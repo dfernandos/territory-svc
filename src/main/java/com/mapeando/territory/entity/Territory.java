@@ -40,7 +40,13 @@ public class Territory {
     @Field(name = "mainImage")
     private byte[] mainImage;
 
-    @Field(name = "map")
-    private String map;
+    @Field(name = "reference")
+    private String reference;
+
+    @Field(name = "lat")
+    private double latitude;
+
+    @Field(name = "long")
+    private double longitude;
 
 }
