@@ -1,5 +1,6 @@
 package com.mapeando.territory.controller;
 
+import com.mapeando.territory.entity.Coordinates;
 import com.mapeando.territory.entity.Territory;
 import com.mapeando.territory.service.TerritoryService;
 import com.mapeando.territory.util.ErrorResponse;
@@ -47,6 +48,11 @@ public class TerritoryController {
     @GetMapping("/territory/all")
     public List<Territory> getAllTerritories(){
         return territoryService.getAllTerrytories();
+    }
+
+    @GetMapping("/territory/coordinates")
+    public List<Coordinates> getCoordinates(){
+        return territoryService.getTerritoryCoordidates();
     }
 
     @PutMapping(value = "/territory/update/{territoryId}", consumes = "multipart/form-data")
