@@ -4,6 +4,7 @@ import com.mapeando.territory.entity.Coordinates;
 import com.mapeando.territory.entity.Territory;
 import com.mapeando.territory.service.TerritoryService;
 import com.mapeando.territory.util.ErrorResponse;
+import com.mapeando.territory.util.ResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class TerritoryController {
     TerritoryService territoryService;
 
     @PostMapping("/territory/create")
-    public ResponseEntity<?> createTerritory(@RequestParam("file") MultipartFile file,
-                                             @ModelAttribute Territory territory) {
+    public ResponseEntity<ResponseWrapper<?>> createTerritory(@RequestParam("file") MultipartFile file,
+                                                              @ModelAttribute Territory territory) {
         try {
             // Trate a imagem (converta para Base64 ou salve em disco, se preferir)
             byte[] imageData = file.getBytes();
@@ -32,11 +33,13 @@ public class TerritoryController {
 
             // Salve o restante dos dados do território
             Territory savedTerritory = territoryService.createTerritory(territory);
-            return new ResponseEntity<>(savedTerritory, HttpStatus.CREATED);
+            ResponseWrapper<Territory> responseWrapper = new ResponseWrapper<>(savedTerritory);
+            return new ResponseEntity<>(responseWrapper, HttpStatus.CREATED);
         } catch (IOException e) {
             String errorMessage = "Erro ao processar a imagem: " + e.getMessage();
             ErrorResponse errorResponse = new ErrorResponse(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
-            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+            ResponseWrapper<ErrorResponse> responseWrapper = new ResponseWrapper<>(errorResponse);
+            return new ResponseEntity<>(responseWrapper, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -56,7 +59,7 @@ public class TerritoryController {
     }
 
     @PutMapping(value = "/territory/update/{territoryId}", consumes = "multipart/form-data")
-    public ResponseEntity<?> updateTerritory(
+    public ResponseEntity<ResponseWrapper<?>> updateTerritory(
             @PathVariable String territoryId,
             @ModelAttribute Territory territory,
             @RequestParam(value = "file", required = false) MultipartFile file) {
@@ -81,22 +84,30 @@ public class TerritoryController {
                 existingTerritory.setHistory(territory.getHistory());
                 existingTerritory.setCartografia(territory.getCartografia());
                 existingTerritory.setReligion(territory.getReligion());
-                existingTerritory.setExtra_content(territory.getExtra_content());
+                existingTerritory.setExtraContent(territory.getExtraContent());
                 existingTerritory.setReference(territory.getReference());
                 existingTerritory.setLatitude(territory.getLatitude());
                 existingTerritory.setLongitude(territory.getLongitude());
 
                 Territory savedTerritory = territoryService.updateTerritory(existingTerritory);
-                return new ResponseEntity<>(savedTerritory, HttpStatus.CREATED);
+                ResponseWrapper<Territory> responseWrapper = new ResponseWrapper<>(savedTerritory);
+
+                return new ResponseEntity<>(responseWrapper, HttpStatus.CREATED);
+
             } catch (IOException e) {
                 String errorMessage = "Erro ao processar a imagem: " + e.getMessage();
+
                 ErrorResponse errorResponse = new ErrorResponse(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
-                return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+                ResponseWrapper<ErrorResponse> responseWrapper = new ResponseWrapper<>(errorResponse);
+                return new ResponseEntity<>(responseWrapper, HttpStatus.INTERNAL_SERVER_ERROR);
+
             }
         } else {
             String errorMessage = "Território não encontrado com o ID: " + territoryId;
             ErrorResponse errorResponse = new ErrorResponse(errorMessage, HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+            ResponseWrapper<ErrorResponse> responseWrapper = new ResponseWrapper<>(errorResponse);
+            return new ResponseEntity<>(responseWrapper, HttpStatus.NOT_FOUND);
+
         }
     }
 

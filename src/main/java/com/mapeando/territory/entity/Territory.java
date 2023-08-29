@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,7 +34,7 @@ public class Territory {
     private String religion;
 
     @Field(name = "extra_content")
-    private String extra_content;
+    private String extraContent;
 
     @Field(name = "mainImage")
     private byte[] mainImage;
