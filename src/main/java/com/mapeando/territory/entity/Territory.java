@@ -49,4 +49,7 @@ public class Territory {
     @Field(name = "long")
     private double longitude;
 
+    @Field(name = "scratch")
+    private String scratchEmbeb;
+
 }

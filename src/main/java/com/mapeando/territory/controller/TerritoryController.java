@@ -85,6 +85,7 @@ public class TerritoryController {
                 existingTerritory.setReference(territory.getReference());
                 existingTerritory.setLatitude(territory.getLatitude());
                 existingTerritory.setLongitude(territory.getLongitude());
+                existingTerritory.setScratchEmbeb(territory.getScratchEmbeb());
 
                 Territory savedTerritory = territoryService.updateTerritory(existingTerritory);
                 return new ResponseEntity<>(savedTerritory, HttpStatus.CREATED);
