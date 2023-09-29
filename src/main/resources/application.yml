@@ -1,5 +1,4 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://mongo:2WDG8TqJXrseQJpapSJh@containers-us-west-80.railway.app:7215/territotories
-
+      uri: mongodb+srv://mapeando:<G@b@r1t0s1>@cluster0.gqrwywi.mongodb.net/?retryWrites=true&w=majority
