@@ -1,5 +1,5 @@
 spring:
   data:
     mongodb:
-      uri: ${MONGO_URL}/territotories?authSource=admin
+      uri: mongodb://mongo:2WDG8TqJXrseQJpapSJh@containers-us-west-80.railway.app:7215/territotories
 
