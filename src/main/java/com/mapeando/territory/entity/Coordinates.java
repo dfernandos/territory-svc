@@ -22,7 +22,8 @@ public class Coordinates {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Coordinates that)) return false;
+        if (!(o instanceof Coordinates)) return false;
+        Coordinates that = (Coordinates) o;
         return Double.compare(getLatitude(), that.getLatitude()) == 0 && Double.compare(getLongitude(), that.getLongitude()) == 0 && Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName());
     }
 
