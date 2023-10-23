@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://mapeando:Gabaritos1@cluster0.gqrwywi.mongodb.net/territory?ssl=false&retryWrites=true&w=majority/authSource=admin
