@@ -1,4 +1,4 @@
 spring:
   data:
     mongodb:
-      uri: ${MONGO_URL}
+      uri: mongodb+srv://mapeando:Gabaritos1@cluster0.gqrwywi.mongodb.net/territory?retryWrites=true&w=majority/authSource=admin
