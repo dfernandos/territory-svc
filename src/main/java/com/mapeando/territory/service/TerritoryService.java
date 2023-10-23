@@ -16,6 +16,10 @@ public class TerritoryService {
 
     @Autowired
     TerritoryRepository territoryRepository;
+
+    public TerritoryService(TerritoryRepository territoryRepository) {
+        this.territoryRepository = territoryRepository;
+    }
     public Territory createTerritory(Territory territory) {
         return territoryRepository.save(territory);
     }

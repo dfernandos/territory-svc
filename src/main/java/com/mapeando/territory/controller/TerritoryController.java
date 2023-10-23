@@ -41,8 +41,16 @@ public class TerritoryController {
     }
 
     @GetMapping("/territory/{id}")
-    public Optional<Territory> getTerritoryById(@PathVariable String id){
-        return territoryService.getTerritoryById(id);
+     public ResponseEntity<?> getTerritoryById(@PathVariable String id){
+        try{
+
+            Optional<Territory> territoryDB = territoryService.getTerritoryById(id);
+            return new ResponseEntity<>(territoryDB.get(), HttpStatus.OK);
+        }catch (Exception ex){
+            String errorMessage = "Território não encontrado: " + ex.getMessage();
+            ErrorResponse errorResponse = new ErrorResponse(errorMessage, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/territory/all")
@@ -107,9 +115,14 @@ public class TerritoryController {
     }
 
     @DeleteMapping("/territory/{id}")
-    @ResponseStatus(code = HttpStatus.OK, reason = "OK")
     public HttpStatus deleteTerritoryById(@PathVariable String id){
-        return territoryService.deleteTerritory(id);
+
+        try{
+            return territoryService.deleteTerritory(id);
+        }catch (Exception ex){
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
     }
 
 }
