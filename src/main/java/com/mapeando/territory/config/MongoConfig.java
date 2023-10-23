@@ -14,10 +14,12 @@ public class MongoConfig {
     @Autowired
     public MongoConfig(DatabaseConfigProperties properties) {
         this.properties = properties;
+        System.out.println("MongoConfig constructor called");
     }
 
     @Bean
     public MongoTemplate mongoTemplate() {
+        System.out.println("Creating MongoTemplate");
         return new MongoTemplate(new SimpleMongoClientDatabaseFactory(properties.getUri()));
     }
 }
