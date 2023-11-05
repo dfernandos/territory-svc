@@ -34,9 +34,6 @@ jobs:
     - name: Set up environment variables
       run: echo "My secret is ${{ secrets.MONGODB_URI }}"
 
-    - name: Debug MONGODB_URI TEST
-      run: echo "My var is ${{ vars.VAR_ID }}"
-
     - name: Build with Maven
       run: ./mvnw -B package --file pom.xml
 
