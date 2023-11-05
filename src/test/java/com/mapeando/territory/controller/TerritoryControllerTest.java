@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,7 +18,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,17 +52,17 @@ class TerritoryControllerTest {
 
     @BeforeEach
     void setUp(){
-        territory = new Territory( "sds", "dsas", "asda", "sdad", "dasdas", "sdfsdf", "34345", null, "asdasd", 0.0, 0.0, "dsad");
+        territory = new Territory( "id", "name", "description", "history", "cartography", "religion", "content", null, "reference", 0.0, 0.0, "site");
         territoryList = Arrays.asList(
-                new Territory( "sds", "dsas", "asda", "sdad", "dasdas", "sdfsdf", "34345", null, "asdasd", 0.0, 0.0, "dsad"),
-                new Territory( "sds", "dsas", "asda", "sdad", "dasdas", "sdfsdf", "34345", null, "asdasd", 0.0, 0.0, "dsad"));
+                new Territory( "id", "name", "description", "history", "cartography", "religion", "content", null, "reference", 0.0, 0.0, "site"),
+                new Territory( "id", "name", "description", "history", "cartography", "religion", "content", null, "reference", 0.0, 0.0, "site"));
     }
 
     @Test
     void shouldAddATerritoryAndReturn201() throws Exception {
 
         // mock image file
-        byte[] imageData = "Imagem de teste".getBytes();
+        byte[] imageData = "image test".getBytes();
         MockMultipartFile file = new MockMultipartFile("file", "test-image.jpg", MediaType.IMAGE_JPEG_VALUE, imageData);
 
         when(territoryService.createTerritory(any(Territory.class))).thenReturn(territory);
@@ -81,7 +78,7 @@ class TerritoryControllerTest {
     void shouldNotAddATerritoryAndReturn400Error() throws Exception {
 
         // mock image file
-        byte[] imageData = "Imagem de teste".getBytes();
+        byte[] imageData = "image test".getBytes();
         MockMultipartFile file = new MockMultipartFile("NotCorrectName", "test-image.jpg", MediaType.IMAGE_JPEG_VALUE, imageData);
 
         when(territoryService.createTerritory(any(Territory.class))).thenReturn(territory);
@@ -124,14 +121,11 @@ class TerritoryControllerTest {
     void testUpdateTerritory() throws Exception {
 
         byte[] imageData = "Imagem de teste".getBytes();
-        // Crie um arquivo MockMultipartFile de exemplo
         MockMultipartFile file = new MockMultipartFile("file", "test-image.jpg", MediaType.IMAGE_JPEG_VALUE, imageData);
 
-        // Configure o comportamento do mock do TerritoryService, se necessário
         when(territoryService.getTerritoryById("1")).thenReturn(Optional.of(territory));
         when(territoryService.updateTerritory(any(Territory.class))).thenReturn(territory);
 
-        // Realize a solicitação PUT simulada com MockMvc
         ResultActions result = mockMvc.perform(put("/api/territory-svc/territory/update/{id}", "1")
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .content(objectMapper.writeValueAsString(territory)))
@@ -141,15 +135,12 @@ class TerritoryControllerTest {
     @Test
     void getAllTerritoriesCoordinates() throws Exception {
 
-        // Crie uma lista de coordenadas simulada para retornar no mock do serviço
         List<Coordinates> coordinatesList = new ArrayList<>();
         coordinatesList.add(new Coordinates("1", 40.0, 50.0, "Territory 1"));
         coordinatesList.add(new Coordinates("2", 35.0, 45.0, "Territory 2"));
 
-        // Configure o comportamento do mock do TerritoryService para retornar a lista simulada
         when(territoryService.getTerritoryCoordidates()).thenReturn(coordinatesList);
 
-        // Realize a solicitação GET simulada com MockMvc
         ResultActions resultActions = mockMvc.perform(get("/api/territory-svc/territory/coordinates"))
                 .andExpect(status().isOk());
     }
