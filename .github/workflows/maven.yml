@@ -32,6 +32,7 @@ jobs:
     - name: Set up environment variables
       env:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      run: echo $MONGODB_URI
 
     - name: Debug MONGODB_URI
       run: echo $MONGODB_URI
