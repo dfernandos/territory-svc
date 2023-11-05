@@ -21,6 +21,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
@@ -28,18 +29,18 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Setup env variable
-      with: # Set the secret as an input
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      env: # Or as an environment variable
+    - name: Set up environment variables
+      env:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
     - name: Debug MONGODB_URI
-      run: echo "$MONGODB_URI"
+      run: echo $MONGODB_URI
 
     - name: Build with Maven
       run: ./mvnw -B package --file pom.xml
+
     - name: Run all tests
       run: ./mvnw test
+
 
 
