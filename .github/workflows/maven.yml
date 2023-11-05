@@ -18,6 +18,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
     steps:
     - uses: actions/checkout@v3
@@ -30,11 +32,9 @@ jobs:
         cache: maven
 
     - name: Set up environment variables
-      env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
       run: echo "My secret is ${{ secrets.MONGODB_URI }}"
 
-    - name: Debug MONGODB_URI
+    - name: Debug MONGODB_URI TEST
       run: echo "My var is ${{ vars.VAR_ID }}"
 
     - name: Build with Maven
