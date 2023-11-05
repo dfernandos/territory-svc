@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = TerritoryController.class)
-public class TerritoryControllerTest {
+class TerritoryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
