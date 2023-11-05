@@ -2,15 +2,17 @@
 
 🔍 **Sumary**
 - [Territory Service](#Territory-Service)
-  - [E2E Tests](#testes-e2e)
     - [Project Structure](#estrutura-do-projeto)
     - [Tech Stack](#Tech-Stack)
     - [Build](#Build)
-    - [How to run the tests](#How-to-run-the-tests)
-    - [Test Scenarios](#Test_Scenarios)
+    - [How to run the project](#How_to_run_the_project)
+    - [Test strategy](#Test_strategy)
+    - [CI/CD](#CI/CD)
+
       
 ---
 
+### Territory Service
 
 ### Tech Stack
 
