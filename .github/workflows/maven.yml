@@ -28,8 +28,11 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Set up environment variables
-      run: echo "export MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
+    - name: Setup env variable
+      with: # Set the secret as an input
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      env: # Or as an environment variable
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
     - name: Debug MONGODB_URI
       run: echo "$MONGODB_URI"
