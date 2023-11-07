@@ -3,11 +3,20 @@ package com.mapeando.territory;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.gson.Gson;
+import com.mapeando.territory.config.FirebaseConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.sql.SQLOutput;
+
+import com.google.gson.Gson;
+import org.springframework.context.annotation.Bean;
+
+// ...
 
 @SpringBootApplication
 public class TerritoryApplication {
@@ -15,19 +24,35 @@ public class TerritoryApplication {
     public static void main(String[] args) {
         SpringApplication.run(TerritoryApplication.class, args);
 
-        try {
-            FileInputStream serviceAccount = new FileInputStream("mapeando--quilombos-firebase-adminsdk-dsw8b-26c3c8cf6b.json");
+    }
 
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .build();
+    @Autowired
+    private FirebaseConfig firebaseConfig;
 
-            if (FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
-            }
+    @Bean
+    public FirebaseOptions firebaseOptions() throws IOException {
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        byte[] serviceAccountBytes = convertFirebaseConfigToJson(firebaseConfig).getBytes();
+
+        ByteArrayInputStream serviceAccountStream = new ByteArrayInputStream(serviceAccountBytes);
+
+        return new FirebaseOptions.Builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
+                .build();
+    }
+
+    @Bean
+    public FirebaseApp firebaseApp(FirebaseOptions firebaseOptions) {
+        if (FirebaseApp.getApps().isEmpty()) {
+            return FirebaseApp.initializeApp(firebaseOptions);
         }
+
+        return FirebaseApp.getInstance();
+    }
+
+    private String convertFirebaseConfigToJson(FirebaseConfig config) {
+        Gson gson = new Gson();
+        config.setPrivate_key(config.getPrivate_key());
+        return gson.toJson(config);
     }
 }

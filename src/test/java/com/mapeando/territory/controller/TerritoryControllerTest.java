@@ -1,6 +1,9 @@
 package com.mapeando.territory.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.auth.FirebaseToken;
+import com.mapeando.territory.config.FirebaseAuthentication;
+import com.mapeando.territory.config.FirebaseConfig;
 import com.mapeando.territory.entity.Coordinates;
 import com.mapeando.territory.entity.Territory;
 import com.mapeando.territory.repository.TerritoryRepository;
@@ -9,15 +12,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 
 import java.util.ArrayList;
@@ -27,12 +38,19 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = TerritoryController.class)
 class TerritoryControllerTest {
+
+    @Configuration
+    static class TestConfig {
+        @Bean
+        public FirebaseConfig firebaseConfig() {
+            return mock(FirebaseConfig.class);
+        }
+    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,12 +64,27 @@ class TerritoryControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Mock
+    private FirebaseAuthentication firebaseAuthentication;
+
+    @MockBean
+    private FirebaseConfig firebaseConfig;
+
     private Territory territory;
 
     List<Territory> territoryList;
 
     @BeforeEach
     void setUp(){
+        when(firebaseConfig.getProject_id()).thenReturn("your_project_id");
+        when(firebaseConfig.getPrivate_key()).thenReturn("your_private_key");
+        when(firebaseConfig.getAuth_uri()).thenReturn("authId");
+        when(firebaseConfig.getClient_id()).thenReturn("client-id");
+        when(firebaseConfig.getType()).thenReturn("type");
+        when(firebaseConfig.getClient_email()).thenReturn("email");
+        when(firebaseConfig.getToken_uri()).thenReturn("your_private_key");
+
+
         territory = new Territory( "id", "name", "description", "history", "cartography", "religion", "content", null, "reference", 0.0, 0.0, "site");
         territoryList = Arrays.asList(
                 new Territory( "id", "name", "description", "history", "cartography", "religion", "content", null, "reference", 0.0, 0.0, "site"),
@@ -65,12 +98,15 @@ class TerritoryControllerTest {
         byte[] imageData = "image test".getBytes();
         MockMultipartFile file = new MockMultipartFile("file", "test-image.jpg", MediaType.IMAGE_JPEG_VALUE, imageData);
 
+        when(firebaseAuthentication.validateFirebaseToken(any(String.class))).thenReturn(mock(FirebaseToken.class));
+
         when(territoryService.createTerritory(any(Territory.class))).thenReturn(territory);
 
 
         ResultActions result = mockMvc.perform(fileUpload("/api/territory-svc/territory/create")
                         .file(file)
-                        .param("name", objectMapper.writeValueAsString(territory)))
+                        .param("name", objectMapper.writeValueAsString(territory))
+                        .header("Authorization", "Bearer YourValidTokenHere"))
                 .andExpect(status().isCreated());
     }
 
