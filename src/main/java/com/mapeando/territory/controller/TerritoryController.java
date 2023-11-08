@@ -1,8 +1,5 @@
 package com.mapeando.territory.controller;
 
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
-import com.mapeando.territory.config.FirebaseAuthentication;
 import com.mapeando.territory.entity.Coordinates;
 import com.mapeando.territory.entity.Territory;
 import com.mapeando.territory.service.TerritoryService;
@@ -25,17 +22,14 @@ public class TerritoryController {
     @Autowired
     TerritoryService territoryService;
 
-    @Autowired
-    FirebaseAuthentication firebaseAuthentication;
-
 
     @PostMapping("/territory/create")
     public ResponseEntity<?> createTerritory(@RequestHeader("Authorization") String idToken, @RequestParam("file") MultipartFile file,
                                              @ModelAttribute Territory territory) {
         try {
 
-            String idTokenParsed = idToken.substring(7);
-            FirebaseToken decodedToken = firebaseAuthentication.validateFirebaseToken(idTokenParsed);
+//            String idTokenParsed = idToken.substring(7);
+//            FirebaseToken decodedToken = firebaseAuthentication.validateFirebaseToken(idTokenParsed);
 
             byte[] imageData = file.getBytes();
             territory.setMainImage(imageData);
@@ -46,9 +40,6 @@ public class TerritoryController {
             String errorMessage = "Erro ao processar a imagem: " + e.getMessage();
             ErrorResponse errorResponse = new ErrorResponse(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (FirebaseAuthException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Token inválido ou expirado. Faça o login novamente.", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -89,9 +80,6 @@ public class TerritoryController {
             Territory existingTerritory = optionalTerritory.get();
 
             try {
-                String idTokenParsed = idToken.substring(7);
-                FirebaseToken decodedToken = firebaseAuthentication.validateFirebaseToken(idTokenParsed);
-
                 if (file != null) {
                     byte[] imageData = file.getBytes();
                     territory.setMainImage(imageData);
@@ -117,9 +105,6 @@ public class TerritoryController {
                 String errorMessage = "Erro ao processar a imagem: " + e.getMessage();
                 ErrorResponse errorResponse = new ErrorResponse(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
                 return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-            } catch (FirebaseAuthException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>("Token inválido ou expirado. Faça o login novamente.", HttpStatus.UNAUTHORIZED);
             }
         } else {
             String errorMessage = "Território não encontrado com o ID: " + territoryId;
@@ -133,12 +118,10 @@ public class TerritoryController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/territory/{id}")
+    @DeleteMapping("/territory/delete/{id}")
     public HttpStatus deleteTerritoryById(@PathVariable String id, @RequestHeader("Authorization") String idToken){
 
         try{
-            String idTokenParsed = idToken.substring(7);
-            FirebaseToken decodedToken = firebaseAuthentication.validateFirebaseToken(idTokenParsed);
             return territoryService.deleteTerritory(id);
         }catch (Exception ex){
             return HttpStatus.INTERNAL_SERVER_ERROR;
