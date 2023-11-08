@@ -64,6 +64,7 @@ public class TerritoryApplication implements WebMvcConfigurer {
     private String convertFirebaseConfigToJson(FirebaseConfig config) {
         Gson gson = new Gson();
         config.setPrivate_key(config.getPrivate_key());
+        System.out.println(gson.toJson(config));
         return gson.toJson(config);
     }
 }
