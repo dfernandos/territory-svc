@@ -28,6 +28,7 @@ public class TerritoryController {
     @Autowired
     FirebaseAuthentication firebaseAuthentication;
 
+
     @PostMapping("/territory/create")
     public ResponseEntity<?> createTerritory(@RequestHeader("Authorization") String idToken, @RequestParam("file") MultipartFile file,
                                              @ModelAttribute Territory territory) {

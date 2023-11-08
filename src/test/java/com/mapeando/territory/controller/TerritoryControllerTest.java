@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,11 +65,8 @@ class TerritoryControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Mock
-    private FirebaseAuthentication firebaseAuthentication;
-
     @MockBean
-    private FirebaseConfig firebaseConfig;
+    private FirebaseAuthentication firebaseAuthentication;
 
     private Territory territory;
 
@@ -76,15 +74,6 @@ class TerritoryControllerTest {
 
     @BeforeEach
     void setUp(){
-        when(firebaseConfig.getProject_id()).thenReturn("your_project_id");
-        when(firebaseConfig.getPrivate_key()).thenReturn("your_private_key");
-        when(firebaseConfig.getAuth_uri()).thenReturn("authId");
-        when(firebaseConfig.getClient_id()).thenReturn("client-id");
-        when(firebaseConfig.getType()).thenReturn("type");
-        when(firebaseConfig.getClient_email()).thenReturn("email");
-        when(firebaseConfig.getToken_uri()).thenReturn("your_private_key");
-
-
         territory = new Territory( "id", "name", "description", "history", "cartography", "religion", "content", null, "reference", 0.0, 0.0, "site");
         territoryList = Arrays.asList(
                 new Territory( "id", "name", "description", "history", "cartography", "religion", "content", null, "reference", 0.0, 0.0, "site"),
@@ -92,21 +81,21 @@ class TerritoryControllerTest {
     }
 
     @Test
-    void shouldAddATerritoryAndReturn201() throws Exception {
+    public void testCreateTerritorySuccess() throws Exception {
+        FirebaseToken mockFirebaseToken = mock(FirebaseToken.class);
+        when(firebaseAuthentication.validateFirebaseToken(anyString())).thenReturn(mockFirebaseToken);
 
-        // mock image file
-        byte[] imageData = "image test".getBytes();
-        MockMultipartFile file = new MockMultipartFile("file", "test-image.jpg", MediaType.IMAGE_JPEG_VALUE, imageData);
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", "image/jpeg", "test data".getBytes());
 
-        when(firebaseAuthentication.validateFirebaseToken(any(String.class))).thenReturn(mock(FirebaseToken.class));
+        Territory territory = new Territory();
+        territory.setName("Sample Territory");
 
         when(territoryService.createTerritory(any(Territory.class))).thenReturn(territory);
-
 
         ResultActions result = mockMvc.perform(fileUpload("/api/territory-svc/territory/create")
                         .file(file)
                         .param("name", objectMapper.writeValueAsString(territory))
-                        .header("Authorization", "Bearer YourValidTokenHere"))
+                        .header("Authorization", "Bearer myToken"))
                 .andExpect(status().isCreated());
     }
 
