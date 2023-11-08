@@ -30,6 +30,7 @@ jobs:
       FIREBASE_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_CLIENT_X509_CERT_URL }}
       FIREBASE_UNIVERSE_DOMAIN: ${{ secrets.FIREBASE_UNIVERSE_DOMAIN }}
       FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+      FIREBASE_TYPE: ${{ secrets.FIREBASE_TYPE }}
 
     steps:
       - uses: actions/checkout@v3
