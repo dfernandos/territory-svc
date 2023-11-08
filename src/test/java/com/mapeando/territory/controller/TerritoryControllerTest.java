@@ -70,7 +70,8 @@ class TerritoryControllerTest {
 
         ResultActions result = mockMvc.perform(fileUpload("/api/territory-svc/territory/create")
                         .file(file)
-                        .param("name", objectMapper.writeValueAsString(territory)))
+                        .param("name", objectMapper.writeValueAsString(territory))
+                        .header("Authorization", "Bearer myToken"))
                 .andExpect(status().isCreated());
     }
 
@@ -86,7 +87,8 @@ class TerritoryControllerTest {
 
         ResultActions result = mockMvc.perform(fileUpload("/api/territory-svc/territory/create")
                         .file(file)
-                        .param("name", objectMapper.writeValueAsString(territory)))
+                        .param("name", objectMapper.writeValueAsString(territory))
+                        .header("Authorization", "Bearer myToken"))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -98,7 +100,8 @@ class TerritoryControllerTest {
 
     @Test
     void deleteTerritory() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/territory-svc/territory/{id}", "1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/territory-svc/territory/delete/{id}", "1")
+                        .header("Authorization", "Bearer myToken"))
                 .andExpect(status().isOk());
     }
 
@@ -128,7 +131,8 @@ class TerritoryControllerTest {
 
         ResultActions result = mockMvc.perform(put("/api/territory-svc/territory/update/{id}", "1")
                         .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .content(objectMapper.writeValueAsString(territory)))
+                        .content(objectMapper.writeValueAsString(territory))
+                        .header("Authorization", "Bearer myToken"))
                 .andExpect(status().isCreated());
     }
 

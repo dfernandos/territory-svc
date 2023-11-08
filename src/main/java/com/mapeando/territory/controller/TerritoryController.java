@@ -22,15 +22,18 @@ public class TerritoryController {
     @Autowired
     TerritoryService territoryService;
 
+
     @PostMapping("/territory/create")
-    public ResponseEntity<?> createTerritory(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<?> createTerritory(@RequestHeader("Authorization") String idToken, @RequestParam("file") MultipartFile file,
                                              @ModelAttribute Territory territory) {
         try {
-            // Trate a imagem (converta para Base64 ou salve em disco, se preferir)
+
+//            String idTokenParsed = idToken.substring(7);
+//            FirebaseToken decodedToken = firebaseAuthentication.validateFirebaseToken(idTokenParsed);
+
             byte[] imageData = file.getBytes();
             territory.setMainImage(imageData);
 
-            // Salve o restante dos dados do território
             Territory savedTerritory = territoryService.createTerritory(territory);
             return new ResponseEntity<>(savedTerritory, HttpStatus.CREATED);
         } catch (IOException e) {
@@ -41,7 +44,7 @@ public class TerritoryController {
     }
 
     @GetMapping("/territory/{id}")
-     public ResponseEntity<?> getTerritoryById(@PathVariable String id){
+    public ResponseEntity<?> getTerritoryById(@PathVariable String id){
         try{
 
             Optional<Territory> territoryDB = territoryService.getTerritoryById(id);
@@ -66,6 +69,7 @@ public class TerritoryController {
     @PutMapping(value = "/territory/update/{territoryId}", consumes = "multipart/form-data")
     public ResponseEntity<?> updateTerritory(
             @PathVariable String territoryId,
+            @RequestHeader("Authorization") String idToken,
             @ModelAttribute Territory territory,
             @RequestParam(value = "file", required = false) MultipartFile file) {
 
@@ -114,15 +118,13 @@ public class TerritoryController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/territory/{id}")
-    public HttpStatus deleteTerritoryById(@PathVariable String id){
+    @DeleteMapping("/territory/delete/{id}")
+    public HttpStatus deleteTerritoryById(@PathVariable String id, @RequestHeader("Authorization") String idToken){
 
         try{
             return territoryService.deleteTerritory(id);
         }catch (Exception ex){
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
-
     }
-
 }
