@@ -45,7 +45,7 @@ jobs:
         run: echo "My secret is ${{ secrets.MONGODB_URI }}, firebase projectId ${{ secrets.FIREBASE_PROJECT_ID }}"
 
       - name: Clear Maven Cache
-        run: mvn dependency:purge-local-repository -DreResolve=false
+        run: ./mvnw dependency:purge-local-repository -DreResolve=false
 
       - name: Build with Maven
         run: ./mvnw -B package --file pom.xml
