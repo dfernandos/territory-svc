@@ -1,6 +1,7 @@
 package com.mapeando.territory.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.mapeando.territory.config.FirebaseAuthentication;
 import com.mapeando.territory.config.FirebaseConfig;
@@ -11,8 +12,12 @@ import com.mapeando.territory.service.TerritoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,15 +48,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = TerritoryController.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FirebaseAuthentication.class})
 class TerritoryControllerTest {
-
-    @Configuration
-    static class TestConfig {
-        @Bean
-        public FirebaseConfig firebaseConfig() {
-            return mock(FirebaseConfig.class);
-        }
-    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -73,7 +72,16 @@ class TerritoryControllerTest {
     List<Territory> territoryList;
 
     @BeforeEach
-    void setUp(){
+    void setUp() throws FirebaseAuthException {
+
+//        FirebaseToken mockFirebaseToken = PowerMockito.mock(FirebaseToken.class);
+//
+//// Mock the behavior of a specific method from the FirebaseToken class
+//        when(mockFirebaseToken.getUid()).thenReturn("mockedValue");
+//
+//        PowerMockito.mockStatic(FirebaseAuthentication.class);
+//        PowerMockito.when(firebaseAuthentication.validateFirebaseToken(anyString())).thenReturn(mockFirebaseToken);
+
         territory = new Territory( "id", "name", "description", "history", "cartography", "religion", "content", null, "reference", 0.0, 0.0, "site");
         territoryList = Arrays.asList(
                 new Territory( "id", "name", "description", "history", "cartography", "religion", "content", null, "reference", 0.0, 0.0, "site"),
@@ -82,8 +90,10 @@ class TerritoryControllerTest {
 
     @Test
     public void testCreateTerritorySuccess() throws Exception {
+        // Mock FirebaseToken
         FirebaseToken mockFirebaseToken = mock(FirebaseToken.class);
-        when(firebaseAuthentication.validateFirebaseToken(anyString())).thenReturn(mockFirebaseToken);
+        when(firebaseAuthentication.validateFirebaseToken(Mockito.anyString())).thenReturn(mockFirebaseToken);
+
 
         MockMultipartFile file = new MockMultipartFile("file", "test.jpg", "image/jpeg", "test data".getBytes());
 

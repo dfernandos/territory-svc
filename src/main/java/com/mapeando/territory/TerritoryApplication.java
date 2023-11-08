@@ -15,10 +15,12 @@ import java.sql.SQLOutput;
 
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 // ...
 
 @SpringBootApplication
+@ComponentScan(basePackages = {"com.mapeando.territory", "com.mapeando.territory.config"})
 public class TerritoryApplication {
 
     public static void main(String[] args) {
