@@ -63,14 +63,14 @@ Este projeto foi criado para a disciplina de Trabalho de Conclusão II para a ob
 - Test scenarios
 
   - For testing the the TerritoryService class:
-    - Create a territóry successfully
+    - Create a territory successfully
     - Get a all territories successfully
     - Should delete a territory successfully
     - Should get a territory by Id Successfully
     - Should update a territory sucessfully
 
   - For testing the the TerritoryController class:
-    - Create a territóry successfully and return 201
+    - Create a territory successfully and return 201
     - Validate if an error is throwed in case there is a issue
     - Get all territories successfully and return 200
     - Should delete a territory successfully and return 200
